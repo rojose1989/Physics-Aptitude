@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Physics Minor Course Aptitude Test</title>
+<style>
+body{font-family:Arial;max-width:900px;margin:auto;background:#f4f7fb;padding:20px}
+h1{text-align:center;color:#003366}
+#timer{float:right;font-size:22px;color:#c00;font-weight:bold}
+.option{display:block;padding:8px;margin:6px 0;border:1px solid #ccc;border-radius:5px}
+button{padding:10px 18px;margin-top:15px}
+.correct{background:#d4edda}.wrong{background:#f8d7da}
+</style>
+</head>
+<body>
+<h1>Physics Minor Course Aptitude Test</h1>
+<div><b>Duration:</b> 20 Minutes &nbsp; | &nbsp; <b>Questions:</b> 30
+<span id="timer">20:00</span></div>
+<hr>
+<div id="quiz"></div>
+<button onclick="submitQuiz()">Submit Test</button>
+<div id="result"></div>
+
+<script>
+let time=1200;
+setInterval(()=>{
+let m=Math.floor(time/60),s=time%60;
+document.getElementById("timer").innerHTML=String(m).padStart(2,'0')+":"+String(s).padStart(2,'0');
+if(time--<=0) submitQuiz();
+},1000);
+
+const q=[
+
+["A car travels 72 km in 1 hour. Its speed in m/s is",
+["10","15","20","25"],2],
+
+["A body is moving with constant velocity. Which statement is correct?",
+["Net force is zero","Acceleration is maximum","Speed keeps increasing","Momentum is zero"],0],
+
+["A ball is thrown vertically upward. At its highest point its",
+["Velocity and acceleration are zero","Velocity is zero but acceleration is downward","Acceleration is zero","Velocity is maximum"],1],
+
+["A student walks 3 m east and then 4 m north. His displacement is",
+["5 m","7 m","1 m","12 m"],0],
+
+["Which graph represents uniform acceleration?",
+["Straight line in displacement-time graph","Horizontal velocity-time graph","Straight line in velocity-time graph","Curved velocity-time graph"],2],
+
+["A 2 kg object accelerates at 3 m/s². The net force acting on it is",
+["1.5 N","5 N","6 N","9 N"],2],
+
+["The SI unit of work is",
+["Newton","Joule","Watt","Pascal"],1],
+
+["A 10 N force moves an object by 5 m in its direction. Work done is",
+["2 J","15 J","50 J","100 J"],2],
+
+["Which quantity is conserved in all isolated collisions?",
+["Velocity","Force","Momentum","Acceleration"],2],
+
+["The kinetic energy of a body doubles if its speed becomes",
+["√2 times","2 times","4 times","Half"],0],
+
+["Why do cyclists bend forward during a race?",
+["Increase friction","Reduce air resistance","Increase weight","Increase momentum"],1],
+
+["The pressure exerted by a liquid depends on",
+["Shape of the vessel","Depth only","Depth and density","Volume only"],2],
+
+["A wooden block floats because",
+["It has no weight","Its density is less than water","Water has no pressure","It contains air"],1],
+
+["Which mirror is used as a rear-view mirror?",
+["Plane","Convex","Concave","Cylindrical"],1],
+
+["A convex lens always forms a real image when the object is",
+["Inside the focal length","At infinity","Beyond the focal length","At the focus"],2],
+
+["The refractive index of a medium is 1.5. The speed of light in the medium is approximately",
+["2×10⁸ m/s","3×10⁸ m/s","4.5×10⁸ m/s","1×10⁸ m/s"],0],
+
+["Which colour deviates the most through a prism?",
+["Red","Green","Blue","Violet"],3],
+
+["The power of a bulb is 60 W. It consumes",
+["60 J every second","60 C every second","60 V every second","60 A every second"],0],
+
+["Two resistors of 4 Ω and 6 Ω are connected in series. Equivalent resistance is",
+["2.4 Ω","10 Ω","24 Ω","5 Ω"],1],
+
+["A 12 V battery is connected to a 4 Ω resistor. Current is",
+["2 A","3 A","4 A","6 A"],1],
+
+["Which appliance converts electrical energy mainly into mechanical energy?",
+["Electric iron","Mixer","Heater","LED lamp"],1],
+
+["A satellite revolves around Earth because",
+["There is no gravity","Gravity provides centripetal force","Earth rotates","There is no atmosphere"],1],
+
+["The escape velocity from Earth is approximately",
+["11.2 km/s","3 km/s","7.9 km/s","1.1 km/s"],0],
+
+["The energy of a photon increases when",
+["Frequency decreases","Wavelength increases","Frequency increases","Speed decreases"],2],
+
+["Which phenomenon supports the wave nature of light?",
+["Photoelectric effect","Interference","Compton effect","Pair production"],1],
+
+["An electron is negatively charged because",
+["It contains extra protons","It contains no neutrons","Its charge is defined as negative","It has greater mass"],2],
+
+["A spring is stretched by 2 cm with a force of 10 N. The spring constant is",
+["200 N/m","500 N/m","100 N/m","5 N/m"],1],
+
+["If frequency doubles while wave speed remains constant, wavelength becomes",
+["Double","Half","Four times","Unchanged"],1],
+
+["Which branch of physics is most closely related to semiconductor devices?",
+["Mechanics","Optics","Solid State Physics","Fluid Mechanics"],2],
+
+["A physicist is most likely to solve a problem by",
+["Guessing","Performing observations and testing hypotheses","Accepting opinions","Memorizing facts"],1]
+
+];
+let html="";
+q.forEach((x,i)=>{
+html+=`<h3>${i+1}. ${x[0]}</h3>`;
+x[1].forEach((o,j)=>{
+html+=`<label class='option'><input type='radio' name='q${i}' value='${j}'> ${o}</label>`;
+});
+});
+document.getElementById("quiz").innerHTML=html;
+
+
+function submitQuiz(){
+const NEGATIVE=0.25;
+let score=0,correct=0,wrong=0,unanswered=0;
+q.forEach((x,i)=>{
+ const labels=document.querySelectorAll("input[name=q"+i+"]");
+ const selected=document.querySelector("input[name=q"+i+"]:checked");
+ labels.forEach((opt,idx)=>{
+   const lab=opt.parentElement;
+   lab.classList.remove("correct","wrong");
+   if(idx===x[2]) lab.classList.add("correct");
+ });
+ if(selected){
+   if(parseInt(selected.value)===x[2]){
+      score+=1; correct++;
+   }else{
+      score-=NEGATIVE; wrong++;
+      selected.parentElement.classList.remove("correct");
+      selected.parentElement.classList.add("wrong");
+   }
+ }else{
+   unanswered++;
+ }
+});
+document.getElementById("result").innerHTML=
+`<h2>Result</h2>
+<p><b>Correct:</b> ${correct}<br>
+<b>Wrong:</b> ${wrong}<br>
+<b>Unanswered:</b> ${unanswered}<br>
+<b>Score:</b> ${score.toFixed(2)} / ${q.length}</p>
+<p><span style="color:green"><b>Green = Correct Answer</b></span><br>
+<span style="color:red"><b>Red = Your Wrong Answer</b></span><br>
+<b>Negative Marking:</b> -0.25 for each incorrect answer.</p>`;
+window.scrollTo(0,document.body.scrollHeight);
+}
+</script>
+</body>
+</html>
